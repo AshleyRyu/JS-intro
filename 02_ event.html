@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        .bg {
+            background-color: #F7F7F7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        #fire {
+            display: none;
+            /* transform: rotate(90deg); */
+            
+        }
+    </style>
+</head>
+<body>
+    <div class="bg">
+        <img id="dino" width="100px" heigth="100px" src="https://is4-ssl.mzstatic.com/image/thumb/Purple118/v4/88/e5/36/88e536d4-8a08-7c3b-ad29-c4e5dabc9f45/AppIcon-1x_U007emarketing-sRGB-85-220-0-6.png/246x0w.jpg" alt="dino">
+        <img id="fire" src="star.png" width="100px" heigth="100px">
+        <!-- https://png.clipart.me/istock/previews/9376/93767501-fire-flame-icon.jpg  -->
+    </div>
+
+    <script>
+        let y = 0
+        let x = 0
+        // 무엇을(대상)
+        const dinoImage = document.querySelector('#dino') 
+        // 언제
+        dinoImage.addEventListener('click', function(e) {  // 클릭 이벤트
+            // 무엇을(액션)
+            // alert('크앙!!!캉캉!!')
+            console.log(e)  
+            const bgDiv = document.querySelector('.bg')
+            bgDiv.append('크앙')
+        })
+
+        document.addEventListener('keydown', function(e) { // 키보드 이벤트
+            console.log(e)
+            if (e.keyCode === 38) {    // 화살표 위!
+                console.log('위로')
+                y += 10
+                dinoImage.style.marginBottom = `${y}px`
+            }
+        })
+        document.addEventListener('keydown', function(e) { // 키보드 이벤트
+            console.log(e)
+            if (e.keyCode === 40) {    // 화살표 위!
+                console.log('아래로')
+                y -= 10
+                dinoImage.style.marginBottom = `${y}px`
+            }
+        })
+        document.addEventListener('keydown', function(e) { // 키보드 이벤트
+            console.log(e)
+            if (e.keyCode === 37) {    // 화살표 위!
+                console.log('왼쪽으로')
+                x -= 10
+                dinoImage.style.marginLeft = `${x}px`
+            }
+        })
+        document.addEventListener('keydown', function(e) { // 키보드 이벤트
+            console.log(e)
+            if (e.keyCode === 39) {    // 화살표 위!
+                console.log('오른쪽으로')
+                x += 10
+                dinoImage.style.marginLeft = `${x}px`
+            }
+        })
+        document.addEventListener('keydown', function(e) { // 키보드 이벤트
+            console.log(e)
+            const bgFire = document.querySelector('.bg')
+            if (e.code === 'Space') {
+                const fire = document.querySelector('#fire')
+                if (fire.style.display === 'none') {
+                    fire.style.display = 'block'
+                }
+                else {
+                    fire.style.display = 'none'
+                }
+            }
+        })
+
+        
+    </script>
+</body>
+</html>

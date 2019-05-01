@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <header>Hi</header>
+</head>
+<body>
+<h1>Yo</h1>
+<script>
+// 1. 배열 반복하면서 출력
+    const avengers = ['1', '2', '3']
+    avengers.forEach( heroName => console.log(heroName) )
+    avengers.forEach(function (heroName) {
+        console.log(heroName)
+    })
+
+// 2. map
+    const numbers = [1, 2, 3]
+    const strNumbers = numbers.map(number => String(number))
+    console.log(strNumbers)
+    const squreNumbers = numbers.map(number => String(number*number))
+    console.log(squreNumbers)
+    const squreNumbers2 = numbers.map(function(number){
+        return number*number
+    })
+    console.log(squreNumbers2)
+    const jiwon = [
+
+    ]
+// 4. reduce : 각각을 누적적으로 더하거나 
+    const reduceNum = [1, 5, 6]
+    const reduceResult = reduceNum.reduce((result, num) => {
+        
+    })
+    
+</script>
+</body>
+</html>
