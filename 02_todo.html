@@ -8,9 +8,11 @@
 </head>
 <body>
     <div id="app">
-        <input type="text" v-model="newTodo"> <br>
+        <!-- v-model : data의 newTodo 값이 사용자가 입력하는 값으로 변경됨. -->
+        <input type="text" v-model="newTodo" v-on:keyup.enter="addnewTodo"> <br>
         {{ newTodo }}
         <ul>
+            <!-- v-for가 우선, v-if가 나중 -->
             <li v-for="todo in todoList" v-if="!todo.completed">
                 {{ todo.content }} <button v-on:click="checkComplete(todo)">완료</button>
             </li>
@@ -40,12 +42,25 @@
                         content: '어벤저스보기',
                         completed: false
                     },
-                ]
-            },
+                ]},
             methods:{
+                check: function(todo){
+                    todo.completed = !todo.completed
+                },
                 checkComplete: function(todo){
                     // this.todoList[id].completed = true
                     todo.completed = !todo.completed
+                },
+                addnewTodo: function(){
+                    // this : vue 오브젝트(app)
+                    // this.todoList : data의 todoList
+                    this.todoList.push({
+                        // this.newTodo : data의 newTodo ( 사용자가 입력한 값 )
+                        content: this.newTodo,
+                        completed: false
+                    })
+                    this.newTodo = '' // 입력하는값 안보이게
+                    // 바닐라 JS에서 프론트엔드에서 쏘면서 로직 만들어내는게 vue, react
                 },
             }
         })
