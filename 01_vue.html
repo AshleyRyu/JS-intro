@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        {{message}} - {{count}}
+        <button v-on:click="plus">Count증가!</button>
+        <!-- v-on eventlister와 관련/이벤트/method -->
+    </div>
+    <!-- 도움되는 콘솔 경고를 포함한 개발 버전 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        const app = new Vue({
+            // data key object안에서 message 뽑아줌 (django context -> templates 처럼)
+            // app의 message값을 바꿔가면서 동적으로 실행한다.
+            // 이런것을 MVVM(Model Vue ViewModel) 이라고 칭함
+            // 외부 data도 new Vue가 받아서 html에서 그려준다.
+            // single page application이 아님 (Trello가 대표적인 single page)
+            //
+            
+            // element: 실제 Vue와 연결 할 element
+            el: '#app', // 나는 element를 dom-vue 연결시킴 그 안의 영역은 app이 관리해줌
+            // app (vue 인스턴스)의 속성을 가지게 된다.
+            data: {
+                message: 'Hello, Vue!',
+                count: 0
+            },
+            /*
+            arrowfuncton = 자기 위에를 가지고있음
+            function = 자기 호출한애 가지고있음
+            그래서 function으로 method정의해야한다.
+            둘 다 this가 가리키는게 다르다
+            -> 관련 키워드 : arrow function => lexicial this 문맥적 판단
+            */
+            methods: {
+                // python def랑 뭐가 다른가?
+                plus: function(){
+                    // method 정의하는때 못씀
+                    // this: self와 같다
+                    this.count ++
+                }
+            }
+        })
+    </script>
+</body>
+</html>
