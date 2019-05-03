@@ -17,19 +17,26 @@
     <button id="dog">멍멍이 주떼오</button>
     <button id="cat">냐옹이 주떼오</button>
     <div id ="animals"></div>
+    <div id="app">
+        <button v-on:click="getDogImage"> 댕댕이 </button>
+        <img v-bind:src="image" alt="no image">
+        <!-- {{ image }} -->
+    </div>
 
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script>
         
         const getDogImage = function() {
             axios.get('https://dog.ceo/api/breeds/image/random')
-            .then(response => response.data.message)
-            .then(url => {
-                const imageTag = document.createElement('img')
-                imageTag.src = url
-                const animal = document.querySelector('#animals')
-                animal.append(imageTag)
-            })
+            .then(response => this.image = response.data.message)
+            // .then(response => response.data.message)
+            // .then(url => {
+            //     const imageTag = document.createElement('img')
+            //     imageTag.src = url
+            //     const animal = document.querySelector('#animals')
+            //     animal.append(imageTag)
+            // })
         }
 
         const dogButton = document.querySelector('#dog')
@@ -37,6 +44,7 @@
 
         const getCatImage = function() {
             axios.get('https://api.thecatapi.com/v1/images/search')
+            // .then(response => this.image = response.data.message)
             .then(response => response.data[0].url)
             .then(url => {
                 const imageTag = document.createElement('img')
@@ -66,6 +74,15 @@
         // const getDogUrl = async () => {
         //     const dogUrl = await axios.get('')
         // }
+        const app = new Vue({
+            el: '#app',
+            data: {
+                image: ''
+            },
+            methods: {
+                getDogImage
+            }
+        })
     </script>
 
 </body>
