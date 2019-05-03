@@ -11,6 +11,7 @@
         <!-- v-model : data의 newTodo 값이 사용자가 입력하는 값으로 변경됨. -->
         <input type="text" v-model="newTodo" v-on:keyup.enter="addnewTodo"> <br>
         {{ newTodo }}
+        <button type="text" v-model="todoList" v-on:click="allCompleted">다 함!</button>
         <ul>
             <!-- v-for가 우선, v-if가 나중 -->
             <li v-for="todo in todoList" v-if="!todo.completed">
@@ -62,6 +63,25 @@
                     this.newTodo = '' // 입력하는값 안보이게
                     // 바닐라 JS에서 프론트엔드에서 쏘면서 로직 만들어내는게 vue, react
                 },
+                allCompleted: function(){
+                    // // arrowfucntion 이용
+                    this.todoList.forEach(todo =>{
+                        if (!todo.completed){
+                            this.check(todo)
+                        }
+                    })
+
+                    // const notCompleted = this.todoList.filter(function(todo){
+                    //     return !todo.completed
+                    // })
+                    // notCompleted.forEach(function(todo){
+                    //     this.check(todo)
+                    // })
+
+                    // this.todoList.forEach(function(todo){
+                    //     todo.completed = true
+                    // })
+                }
             }
         })
     </script>
