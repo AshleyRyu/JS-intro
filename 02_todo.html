@@ -21,12 +21,13 @@
         <select v-model="status">
             <option value="all"> 모두보기 </option>
             <option value="completed">완료된것만</option>
-            <option value="acitve">실행듕</option>
+            <option value="active">실행듕</option>
         </select>
         <!-- <button type="text" v-model="todoList" v-on:click="allCompleted">다 함!</button> -->
         <ul>
             <!-- <li v-for="todo in todoList" v-if="!todo.completed"> -->
-            <li v-for="todo in todoList">
+            <!-- <li v-for="todo in todoList"> -->
+            <li v-for="todo in todoListByStatus()">
                 <input type="checkbox" v-model="todo.completed">
                 <span v-bind:class="{completed: todo.completed}">{{ todo.content }}</span>
             </li>
@@ -99,6 +100,33 @@
                     // this.todoList.forEach(function(todo){
                     //     todo.completed = true
                     // })
+                },
+                todoListByStatus: function() {
+                    // 각각을 확인하면서 status가 completed라면,
+                    // completed가 true인 것만 리턴
+                    if( this.status === 'completed') {
+                        return this.todoList.filter((todo) => todo.completed)
+                    }
+
+                    // return인 결과가 true인 경우만 모아준다
+                    // 메서드-func의 this 니까 vue instance이다
+                    // this.todoList.forEach(todo => {
+                    //     if (todo.completed === true){
+                    //         return 
+                    //     }
+                    // })
+
+                    // 각각을 확인하면서 status가 active라면
+                    // completed가 false인 것만 리턴
+                    else if (this.status === 'active') {
+                        return this.todoList.filter((todo) => !todo.completed)
+                    }
+
+                    // all이면
+                    // 그대로 리턴
+                    else{
+                        return this.todoList
+                    }
                 }
             }
         })
