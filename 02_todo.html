@@ -109,6 +109,9 @@
                     this.newTodo = '' // 입력하는값 안보이게
                     // 바닐라 JS에서 프론트엔드에서 쏘면서 로직 만들어내는게 vue, react
                 },
+                deleteTodo: function(){
+                    this.todoList.splice(this.todoList.indexOf(todo), 1)
+                },
                 allCompleted: function(){
                     // // arrowfucntion 이용
                     this.todoList.forEach(todo =>{
