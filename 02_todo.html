@@ -27,7 +27,8 @@
         <ul>
             <!-- <li v-for="todo in todoList" v-if="!todo.completed"> -->
             <!-- <li v-for="todo in todoList"> -->
-            <li v-for="todo in todoListByStatus()">
+            <li v-for="todo in todoListByStatus()" v-bind:key="todo.id">
+                <!-- 키속성을 고윳값으로 줘서 데이터의 순서가 변화할 때 필요 -->
                 <input type="checkbox" v-model="todo.completed">
                 <span v-bind:class="{completed: todo.completed}">{{ todo.content }}</span>
             </li>
@@ -40,29 +41,48 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script>
+        const STORAGE_KEY = 'vue-todo-list'
+        const todoStorage = {
+            fetch: function(){
+                return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
+                // || '[]' : 앞에거가 false면 어떠한 값을 초기화 할때 비어있는 스트링(배열 비어있는 스트링), JSON형태로하려고 string
+            },
+            save: function(todoList){
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(todoList))
+            },
+        }
         const app = new Vue({
             el: '#app',
             data: {
                 newTodo: '',
                 status: 'all',
-                todoList: [
-                    {
-                        content: '쉬는 시간 놀기',
-                        completed: true
-                    },
-                    {
-                        content: '전골 먹기',
-                        completed: false
-                    },
-                    {
-                        content: '약속의 2시에 취업특강 들으면서 자기',
-                        completed: false
-                    },
-                    {
-                        content: '어벤저스보기',
-                        completed: false
-                    },
-                ]},
+                todoList: todoStorage.fetch()
+                // 첫 빈 스트링에서는 push못하니까
+
+
+                // todoList: [
+                //     {
+                //         id: 1,
+                //         content: '쉬는 시간 놀기',
+                //         completed: true
+                //     },
+                //     {
+                //         id: 2,
+                //         content: '전골 먹기',
+                //         completed: false
+                //     },
+                //     {
+                //         id: 3,
+                //         content: '약속의 2시에 취업특강 들으면서 자기',
+                //         completed: false
+                //     },
+                //     {
+                //         id: 4,
+                //         content: '어벤저스보기',
+                //         completed: false
+                //     },
+                // ]
+                },
             methods:{
                 check: function(todo){
                     todo.completed = !todo.completed
@@ -76,6 +96,7 @@
                     // this.todoList : data의 todoList
                     this.todoList.push({
                         // this.newTodo : data의 newTodo ( 사용자가 입력한 값 )
+                        id: new Date(),
                         content: this.newTodo,
                         completed: false
                     })
@@ -127,6 +148,12 @@
                     else{
                         return this.todoList
                     }
+                },
+            },
+            watch: {
+                // local storage에 저장하겠습니다
+                todoList: function() {
+                    todoStorage.save(this.todoList)
                 }
             }
         })
