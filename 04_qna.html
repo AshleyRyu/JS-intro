@@ -15,7 +15,11 @@
         <img v-bind:src="imageUrl">
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+            <!-- v-for가 우선, v-if가 나중 -->
+            <li v-for="todo in todoList" v-if="!todo.completed">
+                    {{ todo.content }} <button v-on:click="checkComplete(todo)">완료</button>
+                </li>
+                <li v-else><del>{{ todo.content }}</del><button v-on:click="checkComplete(todo)">취소</button></li>
     <script>
     const app = new Vue({
         el: '#app',

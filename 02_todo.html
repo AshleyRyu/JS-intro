@@ -5,19 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <style>
+        .completed{
+            text-decoration: line-through;
+            color: brown;   
+        }
+    </style>
 </head>
 <body>
     <div id="app">
         <!-- v-model : data의 newTodo 값이 사용자가 입력하는 값으로 변경됨. -->
         <input type="text" v-model="newTodo" v-on:keyup.enter="addnewTodo"> <br>
         {{ newTodo }}
-        <button type="text" v-model="todoList" v-on:click="allCompleted">다 함!</button>
+        <button v-on:click="allCompleted">All completed</button>
+        <!-- <button type="text" v-model="todoList" v-on:click="allCompleted">다 함!</button> -->
         <ul>
-            <!-- v-for가 우선, v-if가 나중 -->
-            <li v-for="todo in todoList" v-if="!todo.completed">
-                {{ todo.content }} <button v-on:click="checkComplete(todo)">완료</button>
+            <!-- <li v-for="todo in todoList" v-if="!todo.completed"> -->
+            <li v-for="todo in todoList">
+                <input type="checkbox" v-model="todo.completed">
+                <span v-bind:class="{completed: todo.completed">{{ todo.content }}</span>
             </li>
-            <li v-else><del>{{ todo.content }}</del><button v-on:click="checkComplete(todo)">취소</button></li>
+            <!-- v-for가 우선, v-if가 나중 -->
+            <!-- <li v-for="todo in todoList" v-if="!todo.completed">
+                    {{ todo.content }} <button v-on:click="checkComplete(todo)">완료</button>
+            </li>
+            <li v-else><del>{{ todo.content }}</del><button v-on:click="checkComplete(todo)">취소</button></li> -->
         </ul>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
