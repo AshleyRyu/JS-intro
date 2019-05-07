@@ -18,12 +18,17 @@
         <input type="text" v-model="newTodo" v-on:keyup.enter="addnewTodo"> <br>
         {{ newTodo }}
         <button v-on:click="allCompleted">All completed</button>
+        <select v-model="status">
+            <option value="all"> 모두보기 </option>
+            <option value="completed">완료된것만</option>
+            <option value="acitve">실행듕</option>
+        </select>
         <!-- <button type="text" v-model="todoList" v-on:click="allCompleted">다 함!</button> -->
         <ul>
             <!-- <li v-for="todo in todoList" v-if="!todo.completed"> -->
             <li v-for="todo in todoList">
                 <input type="checkbox" v-model="todo.completed">
-                <span v-bind:class="{completed: todo.completed">{{ todo.content }}</span>
+                <span v-bind:class="{completed: todo.completed}">{{ todo.content }}</span>
             </li>
             <!-- v-for가 우선, v-if가 나중 -->
             <!-- <li v-for="todo in todoList" v-if="!todo.completed">
@@ -38,6 +43,7 @@
             el: '#app',
             data: {
                 newTodo: '',
+                status: 'all',
                 todoList: [
                     {
                         content: '쉬는 시간 놀기',
