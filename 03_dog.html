@@ -19,6 +19,8 @@
     <div id ="animals"></div>
     <div id="app">
         <button v-on:click="getDogImage"> 댕댕이 </button>
+        <p> 댕댕이 {{ dogCount }} 마리 ~ </p>
+        <hr>
         <!-- <img v-bind:src="image" alt="no image"> -->
         <img v-for="image in images" v-bind:src="image">
         <!-- {{ image }} -->
@@ -32,6 +34,7 @@
             axios.get('https://dog.ceo/api/breeds/image/random')
             .then(response => {
                 this.images.push(response.data.message)
+                this.dogCount += 1
             })
             // .then(response => response.data.message)
             // .then(url => {
@@ -81,7 +84,8 @@
             el: '#app',
             data: {
                 // image: ''
-                images: []
+                images: [],
+                dogCount: 0
             },
             methods: {
                 getDogImage

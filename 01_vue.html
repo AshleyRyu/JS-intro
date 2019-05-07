@@ -7,9 +7,39 @@
     <title>Document</title>
 </head>
 <body>
+    <!-- v-__ : 디렉티브(Directive)라고 부릅니다
+        vue의 element에 지시를 하는 문법
+        값에 해당하는 부분(="____") JS문법을 사용할 수 있다. -->
     <div id="app">
+        <!-- v-on : 이벤트 리스너를 등록
+            축약형 : @__ -->
         {{message}} - {{count}}
-        <button v-on:click="plus">Count증가!</button>
+        <button v-on:click="plus">Count증가! v-on:click</button>
+        <button @click="plus">@click</button>
+        <!-- v-html은 해당하는 값에 태그가 있으면 html로 출력함 -->
+        <span v-html="htmlMessage"></span>
+        <!-- v-text는 해당하는 값을 그대로 출력함 -->
+        <span v-text="htmlMessage"></span>
+        {{htmlMessage}}
+        <!-- 조건 해당하지 않으면 html태그에 존재하지 않음
+            -> if로 렌더링을 할지말지 결정함. html태그 자체를 보여줄지 말지  -->
+        <span v-if="count > 5">5보다 큼!</span>
+        <!-- 조건 해당하지 않아도 html태그에 존재한다 
+            -> html렌더링을 무조건 하고, css로 화면에 보여줄지 말지를 결정함 -->
+        <h1 v-show="isTrue">!!</h1>
+        <h1 v-once="isTrue">!!</h1>
+        <li v-for="hero in myArray">
+            {{hero}}
+        </li>
+        <a v-bind:href="urlLink">구글</a>
+        <input v-model="blahblah">
+        {{blahblah}}
+        <select v-model="lunch">
+            <option value="특식">특식</option>
+            <option value="한식">한식</option>
+            <option value="가운데">가운데</option>
+        </select>
+        <h1>{{lunch}}</h1>
         <!-- v-on eventlister와 관련/이벤트/method -->
     </div>
     <!-- 도움되는 콘솔 경고를 포함한 개발 버전 -->
@@ -27,8 +57,19 @@
             el: '#app', // 나는 element를 dom-vue 연결시킴 그 안의 영역은 app이 관리해줌
             // app (vue 인스턴스)의 속성을 가지게 된다.
             data: {
+                lunch:'뭐먹지',
+                blahblah: '룰루랄라',
                 message: 'Hello, Vue!',
-                count: 0
+                htmlMessage: '<p>안녕</p>',
+                count: 0,
+                // 콧수염에서 데이터 뽑아올 수 있다
+                isTrue: true,
+                myArray: [
+                    '캡아',
+                    '아이언맨',
+                    '캡마'
+                ],
+                urlLink: 'https://google.com'
             },
             /*
             arrowfuncton = 자기 위에를 가지고있음
@@ -37,13 +78,30 @@
             둘 다 this가 가리키는게 다르다
             -> 관련 키워드 : arrow function => lexicial this 문맥적 판단
             */
+
+            // 호출할때마다 업뎃
             methods: {
                 // python def랑 뭐가 다른가?
                 plus: function(){
                     // method 정의하는때 못씀
                     // this: self와 같다
                     this.count ++
+                },
+                today: function() {
+                    return new Date()
                 }
+            },
+
+            // computed : 계산 결과 받아볼때, 캐싱한다
+            // blahblah 바뀌기 전까지 캐싱해놓고(계산된 결과를 저장), 바뀌면 업뎃
+            computed: {
+                reverseBlahblah: function() {
+                    return this.blahblah.split('').reverse().join('')
+                },
+                computedToday: function() {
+                    return new Date()
+                }
+
             }
         })
     </script>
