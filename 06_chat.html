@@ -79,7 +79,7 @@
             createMessage: function(){
                 if(this.newMessage){
                     this.$firebaseRefs.messages.push({
-                        username: '홍길동',
+                        username: this.currentUser.username,
                         content: this.newMessage,
                     })
                 this.newMessage = '' // 초기화
