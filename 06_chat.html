@@ -23,6 +23,9 @@
         };
         firebase.initializeApp(config);
         const db =firebase.database()
+        var auth = firebase.auth()
+        var ui = new firebaseui.auth.AuthUI(auth)
+        ui.start('#firebaseui-auth-container')
     </script>
 
 
