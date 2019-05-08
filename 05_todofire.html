@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .completed{
+            text-decoration: line-through;
+            color: brown;   
+        }
+    </style>
+    <!-- Vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- Firebase -->
+    <script src="https://gstatic.com/firebasejs/4.2.0/firebase.js"></script>
+    <!-- VueFire -->
+    <script src="https://unpkg.com/vuefire/dist/vuefire.js"></script>
+    <script>
+        // Initialize Firebase
+        // TODO: Replace with your project's customized code snippet
+        const config = {
+            apiKey: "AIzaSyA3MrldFLLop2-uFAfGUEmg5HNHbmcaZtQ",
+            databaseURL: "https://vue-project-ash.firebaseio.com/",
+            projectId: "vue-project-ash",
+
+        };
+        firebase.initializeApp(config);
+        const db =firebase.database()
+    </script>
+</head>
+<body>
+    <div id="app">
+        <!-- v-model : data의 newTodo 값이 사용자가 입력하는 값으로 변경됨. -->
+        <input type="text" v-model="newTodo" v-on:keyup.enter="addnewTodo"> <br>
+        {{ newTodo }}
+        <button v-on:click="allCompleted">All completed</button>
+        <select v-model="status">
+            <option value="all"> 모두보기 </option>
+            <option value="completed">완료된것만</option>
+            <option value="active">실행듕</option>
+        </select>
+        <!-- <button type="text" v-model="todoList" v-on:click="allCompleted">다 함!</button> -->
+        <ul>
+            <!-- <li v-for="todo in todoList" v-if="!todo.completed"> -->
+            <!-- <li v-for="todo in todoList"> -->
+            <li v-for="todo in todoListByStatus()" v-bind:key="todo.id">
+                <!-- 키속성을 고윳값으로 줘서 데이터의 순서가 변화할 때 필요 -->
+                <input type="checkbox" v-model="todo.completed">
+                <span v-bind:class="{completed: todo.completed}">{{ todo.content }}</span>
+            </li>
+            <!-- v-for가 우선, v-if가 나중 -->
+            <!-- <li v-for="todo in todoList" v-if="!todo.completed">
+                    {{ todo.content }} <button v-on:click="checkComplete(todo)">완료</button>
+            </li>
+            <li v-else><del>{{ todo.content }}</del><button v-on:click="checkComplete(todo)">취소</button></li> -->
+        </ul>
+    </div>
+    <script>
+        const STORAGE_KEY = 'vue-todo-list'
+        const todoStorage = {
+            fetch: function(){
+                return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
+                // || '[]' : 앞에거가 false면 어떠한 값을 초기화 할때 비어있는 스트링(배열 비어있는 스트링), JSON형태로하려고 string
+                todoLsit.forEach( function(todo, index){
+                    todo.id = index
+                    todoList.past_id = index
+                })
+                return todoList
+            },
+            save: function(todoList){
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(todoList))
+            },
+        }
+        const app = new Vue({
+            el: '#app',
+            data: {
+                newTodo: '',
+                status: 'all',
+                todoList: todoStorage.fetch()
+                // 첫 빈 스트링에서는 push못하니까
+
+
+                // todoList: [
+                //     {
+                //         id: 1,
+                //         content: '쉬는 시간 놀기',
+                //         completed: true
+                //     },
+                //     {
+                //         id: 2,
+                //         content: '전골 먹기',
+                //         completed: false
+                //     },
+                //     {
+                //         id: 3,
+                //         content: '약속의 2시에 취업특강 들으면서 자기',
+                //         completed: false
+                //     },
+                //     {
+                //         id: 4,
+                //         content: '어벤저스보기',
+                //         completed: false
+                //     },
+                // ]
+                },
+            methods:{
+                check: function(todo){
+                    todo.completed = !todo.completed
+                },
+                checkComplete: function(todo){
+                    // this.todoList[id].completed = true
+                    todo.completed = !todo.completed
+                },
+                addnewTodo: function(){
+                    // this : vue 오브젝트(app)
+                    // this.todoList : data의 todoList
+                    this.todoList.push({
+                        // this.newTodo : data의 newTodo ( 사용자가 입력한 값 )
+                        // id: new Date(),
+                        id: ++this.todoList.past_id,
+                        content: this.newTodo,
+                        completed: false
+                    })
+                    this.newTodo = '' // 입력하는값 안보이게
+                    // 바닐라 JS에서 프론트엔드에서 쏘면서 로직 만들어내는게 vue, react
+                },
+                deleteTodo: function(){
+                    this.todoList.splice(this.todoList.indexOf(todo), 1)
+                },
+                allCompleted: function(){
+                    // // arrowfucntion 이용
+                    this.todoList.forEach(todo =>{
+                        if (!todo.completed){
+                            this.check(todo)
+                        }
+                    })
+
+                    // const notCompleted = this.todoList.filter(function(todo){
+                    //     return !todo.completed
+                    // })
+                    // notCompleted.forEach(function(todo){
+                    //     this.check(todo)
+                    // })
+
+                    // this.todoList.forEach(function(todo){
+                    //     todo.completed = true
+                    // })
+                },
+                todoListByStatus: function() {
+                    // 각각을 확인하면서 status가 completed라면,
+                    // completed가 true인 것만 리턴
+                    if( this.status === 'completed') {
+                        return this.todoList.filter((todo) => todo.completed)
+                    }
+
+                    // return인 결과가 true인 경우만 모아준다
+                    // 메서드-func의 this 니까 vue instance이다
+                    // this.todoList.forEach(todo => {
+                    //     if (todo.completed === true){
+                    //         return 
+                    //     }
+                    // })
+
+                    // 각각을 확인하면서 status가 active라면
+                    // completed가 false인 것만 리턴
+                    else if (this.status === 'active') {
+                        return this.todoList.filter((todo) => !todo.completed)
+                    }
+
+                    // all이면
+                    // 그대로 리턴
+                    else{
+
+                        return this.todoList
+                    }
+                },
+            },
+            watch: {
+                // local storage에 저장하겠습니다
+                todoList: {
+                    handler: function() {
+                        todoStorage.save(this.todoList)
+                    },
+                // deep: true가 없다면, 단순히 해당하는 오브젝트([])에 값이
+                // 추가 되거나 삭제되는 경우만 watch
+                // deep: true가 옵션을 통해 오브젝트([]) 안에 있는 오브젝트(nested objcet)의 변경 사항까지 watch
+                deep: true
+                }
+            }
+        })
+        /*
+        1. 모든 함수는 funtion 키워드로
+        2. 메서드에서 쓰이는 함수 중에 콜백함수는 arrow function
+        3. 메서드 정의시에는 function 키워드
+        */
+    </script>
+    
+</body>
+</html>
