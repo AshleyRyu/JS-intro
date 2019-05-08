@@ -28,20 +28,30 @@
         // ui.start('#firebaseui-auth-container')
     </script>
     <style>
-            .chat {
-                border: 1px solid seashell;
-                background-color: lightgoldenrodyellow;
-            }
-            .my-chat {
-                margin-left: auto;
-                background-color: skyblue;
-            }
+        .chat-container {
+            width: 650px;
+            margin: auto;
+        }
+        .chat {
+            width: 161px;
+            height: 80px;
+            padding: 10px;
+            border: 1px solid seashell;
+            background-color: lightgoldenrodyellow;
+            color: rgb(59, 59, 59);
+        }
+        .my-chat {
+            margin-left: auto;
+            background-color: skyblue;
+        }
         </style>
 
 </head>
 <body>
     <div id="app">
-        <div v-if="currentUser.uid">
+        <div class="chat-container" v-if="currentUser.uid">
+            <button @click="logout">로그아웃</button>
+            <b>{{ currentUser.username }}님이 로그인하셨습니다.</b>
             <ul>
                 <!-- <li v-for="message in messages"> -->
                 <li v-for="message in messages" 
@@ -111,6 +121,14 @@
                     }
                 })
             },
+            logout: function(){
+                this.currentUser = {
+                    uid: '',
+                    email: '',
+                    displayName: '',
+                }
+                auth.signOut()
+            }
         },
     })
     </script>
