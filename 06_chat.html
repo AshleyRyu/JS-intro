@@ -32,13 +32,17 @@
 </head>
 <body>
     <div id="app">
-        <div id="firebaseui-auth-container"></div>
-        <ul>
-            <li v-for="message in messages">
-                <b>{{message.username}}</b> : {{message.content}}
-            </li>
-        </ul>
-        <input v-model="newMessage" @keyup.enter="createMessage">
+        <div v-if="currentUser.uid">
+            <ul>
+                <li v-for="message in messages">
+                    <b>{{message.username}}</b> : {{message.content}}
+                </li>
+            </ul>
+            <input v-model="newMessage" @keyup.enter="createMessage">
+        </div>
+        <div v-else>
+            <div id="firebaseui-auth-container"></div>
+        </div>
     </div>
     <script>
     const app = new Vue({
@@ -55,6 +59,13 @@
                 username: '',
             }
         },
+        
+        // 실제로 실행됨(마운트됨)과 동시에 실행되는 함수
+        mounted: function() {
+            // vue 들어오는 동시에 한번 실행하는 친구
+            this.initUI()
+        },
+
         methods: {
             createMessage: function(){
                 if(this.newMessage){
