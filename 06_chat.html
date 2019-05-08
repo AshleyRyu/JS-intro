@@ -8,7 +8,7 @@
     <!-- Vue -->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <!-- Firebase -->
-    <script src="https://gstatic.com/firebasejs/4.2.0/firebase.js"></script>
+    <script src="https://gstatic.com/firebasejs/5.9.1/firebase.js"></script>
     <!-- VueFire -->
     <script src="https://unpkg.com/vuefire/dist/vuefire.js"></script>
     <script src="https://cdn.firebase.com/libs/firebaseui/3.6.0/firebaseui.js"></script>
@@ -25,13 +25,14 @@
         const db =firebase.database()
         var auth = firebase.auth()
         var ui = new firebaseui.auth.AuthUI(auth)
-        ui.start('#firebaseui-auth-container')
+        // ui.start('#firebaseui-auth-container')
     </script>
 
 
 </head>
 <body>
     <div id="app">
+        <div id="firebaseui-auth-container"></div>
         <ul>
             <li v-for="message in messages">
                 <b>{{message.username}}</b> : {{message.content}}
@@ -63,8 +64,23 @@
                     })
                 this.newMessage = '' // 초기화
                 }
-            }
-        }
+            },
+            initUI: function() {
+                ui.start('#firebaseui-auth-container', {
+                    signInoptions: [
+                        firebase.auth.EmailAuthProvider.PROVIDER_ID
+                    ],
+                    callbacks: {
+                        signInSuccessWithAuthResult: (authResult, redirectUrl) => {
+                            this.currentUser.uid = authResult.user.uid
+                            this.currentUser.email = authResult.user.email
+                            this.currentUser.username = authResult.user.username
+                            return false
+                        }
+                    }
+                })
+            },
+        },
     })
     </script>
 </body>
