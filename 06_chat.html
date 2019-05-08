@@ -27,14 +27,25 @@
         var ui = new firebaseui.auth.AuthUI(auth)
         // ui.start('#firebaseui-auth-container')
     </script>
-
+    <style>
+            .chat {
+                border: 1px solid seashell;
+                background-color: lightgoldenrodyellow;
+            }
+            .my-chat {
+                margin-left: auto;
+                background-color: skyblue;
+            }
+        </style>
 
 </head>
 <body>
     <div id="app">
         <div v-if="currentUser.uid">
             <ul>
-                <li v-for="message in messages">
+                <!-- <li v-for="message in messages"> -->
+                <li v-for="message in messages" 
+                :class="{'chat':true, 'my-chat': currentUser.username === message.username}">
                     <b>{{message.username}}</b> : {{message.content}}
                 </li>
             </ul>
