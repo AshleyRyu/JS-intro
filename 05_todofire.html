@@ -58,27 +58,28 @@
         </ul>
     </div>
     <script>
-        const STORAGE_KEY = 'vue-todo-list'
-        const todoStorage = {
-            fetch: function(){
-                return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
-                // || '[]' : 앞에거가 false면 어떠한 값을 초기화 할때 비어있는 스트링(배열 비어있는 스트링), JSON형태로하려고 string
-                todoLsit.forEach( function(todo, index){
-                    todo.id = index
-                    todoList.past_id = index
-                })
-                return todoList
-            },
-            save: function(todoList){
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(todoList))
-            },
-        }
+        // sotrage를 지우고 firebase 사용할것.
+        // const STORAGE_KEY = 'vue-todo-list'
+        // const todoStorage = {
+        //     fetch: function(){
+        //         return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
+        //         // || '[]' : 앞에거가 false면 어떠한 값을 초기화 할때 비어있는 스트링(배열 비어있는 스트링), JSON형태로하려고 string
+        //         todoLsit.forEach( function(todo, index){
+        //             todo.id = index
+        //             todoList.past_id = index
+        //         })
+        //         return todoList
+        //     },
+        //     save: function(todoList){
+        //         localStorage.setItem(STORAGE_KEY, JSON.stringify(todoList))
+        //     },
+        // }
         const app = new Vue({
             el: '#app',
             data: {
                 newTodo: '',
                 status: 'all',
-                todoList: todoStorage.fetch()
+                // todoList: todoStorage.fetch() firebase이용할 것이니 지운다
                 // 첫 빈 스트링에서는 push못하니까
 
 
@@ -105,6 +106,9 @@
                 //     },
                 // ]
                 },
+            firebase: {
+                todoList: db.ref('todoList')
+            },
             methods:{
                 check: function(todo){
                     todo.completed = !todo.completed
@@ -116,15 +120,16 @@
                 addnewTodo: function(){
                     // this : vue 오브젝트(app)
                     // this.todoList : data의 todoList
-                    this.todoList.push({
-                        // this.newTodo : data의 newTodo ( 사용자가 입력한 값 )
-                        // id: new Date(),
-                        id: ++this.todoList.past_id,
+                    if (this.newTodo) {
+                        this.$firebaseRefs.todoList.push({
+                            //this.newTodo : data의 newTodo (사용자가 입력한 값)
+                        id: new Date(),
+                        // id: ++this.todoList.past_id,
                         content: this.newTodo,
                         completed: false
-                    })
+                        })
+                    }
                     this.newTodo = '' // 입력하는값 안보이게
-                    // 바닐라 JS에서 프론트엔드에서 쏘면서 로직 만들어내는게 vue, react
                 },
                 deleteTodo: function(){
                     this.todoList.splice(this.todoList.indexOf(todo), 1)
