@@ -47,8 +47,9 @@
             <!-- <li v-for="todo in todoList"> -->
             <li v-for="todo in todoListByStatus()" v-bind:key="todo.id">
                 <!-- 키속성을 고윳값으로 줘서 데이터의 순서가 변화할 때 필요 -->
-                <input type="checkbox" v-model="todo.completed">
+                <input type="checkbox" v-model="todo.completed" @change="updateTodo(todo)">
                 <span v-bind:class="{completed: todo.completed}">{{ todo.content }}</span>
+                <button @click="deleteTodo(todo)">삭제</button>
             </li>
             <!-- v-for가 우선, v-if가 나중 -->
             <!-- <li v-for="todo in todoList" v-if="!todo.completed">
@@ -131,15 +132,26 @@
                     }
                     this.newTodo = '' // 입력하는값 안보이게
                 },
-                deleteTodo: function(){
-                    this.todoList.splice(this.todoList.indexOf(todo), 1)
+                deleteTodo: function(todo){
+                    // this.todoList.splice(this.todoList.indexOf(todo), 1)
+                    this.$firebaseRefs.todoList.child(todo['.key']).remove()
+                },
+                updateTodo: function(todo){
+                    const copy = {...todo}
+                    delete copy['.key']
+                    this.$firebaseRefs.todoList.child(todo['.key']).set(copy)
+                    // object를 펼쳐서 만드는것
                 },
                 allCompleted: function(){
                     // // arrowfucntion 이용
-                    this.todoList.forEach(todo =>{
-                        if (!todo.completed){
-                            this.check(todo)
-                        }
+                    // this.todoList.forEach(todo =>{
+                    //     if (!todo.completed){
+                    //         this.check(todo)
+                    //     }
+                    // })
+
+                    this.todoList.forEach(function(todo){
+                        todo.completed = true
                     })
 
                     // const notCompleted = this.todoList.filter(function(todo){
