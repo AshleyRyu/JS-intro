@@ -49,27 +49,36 @@
         el: '#app',
         data: {
             newMessage: '',
-            messages: [
-                {'username': 'Ashley', 'content': '배부르다.'},
-                {'username': 'David', 'content': '졸리다.'},
-            ],
+            // messages: [
+            //     {'username': 'Ashley', 'content': '배부르다.'},
+            //     {'username': 'David', 'content': '졸리다.'},
+            // ],
             currentUser: {
                 uid: '', // user id
                 email: '',
                 username: '',
             }
         },
-        
+        firebase: {
+            messages: db.ref('messages')
+        },
         // 실제로 실행됨(마운트됨)과 동시에 실행되는 함수
         mounted: function() {
+            auth.onAuthStateChanged((user) => {
+                if(user) {
+                    this.currentUser.uid = user.uid
+                    this.currentUser.email = user.email
+                    this.currentUser.username = user.displayName
+                }
             // vue 들어오는 동시에 한번 실행하는 친구
             this.initUI()
+            })
         },
 
         methods: {
             createMessage: function(){
                 if(this.newMessage){
-                    this.messages.push({
+                    this.$firebaseRefs.messages.push({
                         username: '홍길동',
                         content: this.newMessage,
                     })
